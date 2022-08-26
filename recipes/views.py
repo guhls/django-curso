@@ -1,9 +1,9 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 from django.http import HttpResponse
 
 
 def my_view(request):
-    return HttpResponse('Ola Mundo!!')
+    return render(request, 'global/home.html')
 
 
 def home(response):

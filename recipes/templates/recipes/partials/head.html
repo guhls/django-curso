@@ -75,11 +75,13 @@
 
         body {
             font-size: 1.6rem;
+            background-color: var(--color-gray-1);
         }
 
         .container {
             width: 144rem;
             padding: var(--spacing-gutter-medium);
+            margin: 0 auto;
         }
 
         /*Header*/
@@ -97,6 +99,7 @@
         .main-logo {
             font-size: 4rem;
             text-decoration: none;
+            color: var(--color-white);
             /*Extras*/
             display: flex;
             flex-flow: row nowrap;
@@ -108,6 +111,60 @@
 
         .main-icon {
             margin-right: 2rem;
+        }
+
+        /*Search*/
+        .search-form {
+            max-width: 64rem;
+            border: .2rem solid var(--color-primary-dark);
+            margin: 0 auto;
+            position: relative;
+            border-radius: .3rem;
+            transition: 300ms ease-in-out;
+        }
+
+        .search-input, .search-button {
+            border: none;
+            outline: none;
+            background: none;
+            padding: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding-right: 3rem;
+        }
+
+        .search-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transition: 100ms ease-in-out;
+        }
+
+        .search-form:focus-within {
+            border-color: var(--color-primary);
+            background-color: var(--color-white);
+        }
+        
+        .search-form:focus-within .search-button{
+            color: var(--color-primary);
+        }
+
+        .search-form:focus-within .search-button:hover{
+            color: var(--color-white);
+            background-color: var(--color-primary);
+        }
+
+        /*Main*/
+        .main-content {
+            padding-top: 0;
+        }
+        
+        .main-content-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: var(--spacing-gutter-large);
         }
 
     </style>

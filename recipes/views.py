@@ -7,3 +7,7 @@ def home(request):
         "Idade": 21,
         "Title": "Recipes"
     })
+
+
+def recipe(request, id):
+    return render(request, "recipes/pages/recipe-view.html")

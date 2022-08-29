@@ -245,6 +245,11 @@ body {
     filter: brightness(2);
 }
 
+.preparation-steps {
+    padding: var(--spacing-gutter-medium);
+}
+
+
 /*footer*/
 .main-footer {
     display: flex;

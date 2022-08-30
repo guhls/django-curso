@@ -25,7 +25,7 @@ def get_fake():
             'last_name': fake.last_name(),
         },
         'category': {
-            'name': fake.word()
+            'id': 1
         },
         'cover': {
             'url': 'https://loremflickr.com/%s/%s/food,cook' % rand_ratio(),

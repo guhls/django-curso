@@ -254,6 +254,15 @@ body {
     padding: var(--spacing-gutter-medium);
 }
 
+/* Preparation steps in HTML */
+.preparation-steps h1, h2, h3, h4, h5, h6, p{
+    margin: 2rem;
+}
+
+.preparation-steps ol, ul{
+    margin: 0 2rem;
+    padding: 0 4rem;
+}
 
 /*footer*/
 .main-footer {

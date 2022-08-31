@@ -1,7 +1,5 @@
-from django.shortcuts import render
-from utils.recipes.factory import get_fake
+from django.shortcuts import render, get_list_or_404
 from .models import Recipe
-from django.http import HttpResponse, Http404
 
 
 def home(request):
@@ -11,25 +9,35 @@ def home(request):
 
 
 def recipe(request, id):
+    recipe = get_list_or_404(
+        Recipe.objects.filter(
+            pk=id,
+            is_published=True,
+            )
+        )
+
     return render(
         request, "recipes/pages/recipe-view.html",
         context={
-            'recipe': get_fake(),
+            'recipe': recipe[0],
             'is_detail': True,
             }
         )
 
 
 def category(request, category_id):
-    recipes = Recipe.objects.filter(
-        category__id=category_id, is_published=True
-        )
+    recipes = get_list_or_404(
+        Recipe.objects.filter(
+            category__id=category_id,
+            is_published=True,
+        ).order_by('-id')
+    )
 
-    if not recipes:
-        # return HttpResponse(content="Not Found", status=404)
-        raise Http404("Nada Aqui")
+    # if not recipes:
+    #     # return HttpResponse(content="Not Found", status=404)
+    #     raise Http404("Nada Aqui")
 
     return render(request, "recipes/pages/category.html", context={
         "recipes": recipes,
-        "title": f'{recipes.first().category.name} | Category'
+        "title": f'{recipes[0].category.name} | Category'
     })

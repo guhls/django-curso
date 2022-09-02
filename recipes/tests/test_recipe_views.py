@@ -1,11 +1,9 @@
-from django.test import TestCase
 from django.urls import reverse, resolve
 from recipes import views
-from recipes.models import Category, Recipe
-from django.contrib.auth.models import User
+from .test_recipe_base import RecipeSetup
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeSetup):
     # HOME
     # Teste Para verificar se esta caregando a view esperada
     def test_recipe_home_view_ok(self):
@@ -32,30 +30,6 @@ class RecipeViewsTest(TestCase):
 
     # Fazer um teste para verificar se carega os recipes
     def test_check_templates_loads_in_home(self):
-        author = User.objects.create_user(
-            first_name='user',
-            last_name='name',
-            username='username',
-            password='123',
-            email='username@email.com'
-        )
-        category = Category.objects.create(name='Category')
-
-        Recipe.objects.create(
-            author=author,
-            category=category,
-            title='Recipe Title',
-            description='Description title',
-            slug='slug-recipe',
-            preparation_time=20,
-            preparation_time_unit='Minutos',
-            servings=4,
-            servings_unit='Pessoas',
-            preparation_steps='Preparo',
-            preparation_steps_is_html=False,
-            is_published=True,
-        )
-
         response = self.client.get(reverse('recipes:home'))
         response_recipes = response.context['recipes']
         content = response.content.decode('utf-8')

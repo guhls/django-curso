@@ -2,6 +2,8 @@ from django.urls import reverse, resolve
 from recipes import views
 from .test_recipe_base import RecipeSetup
 
+#  from unittest import skip
+
 
 class RecipeViewsTest(RecipeSetup):
     # HOME
@@ -21,6 +23,7 @@ class RecipeViewsTest(RecipeSetup):
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
 
     # Fazer um teste que verifique o que retorna quando não há recipe
+    #  @skip('WIP')
     def test_check_template_not_found_view_home(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertIn(
@@ -28,8 +31,12 @@ class RecipeViewsTest(RecipeSetup):
             response.content.decode('utf-8')
         )
 
+        #  self.fail()
+
     # Fazer um teste para verificar se carega os recipes
     def test_check_templates_loads_in_home(self):
+        self.make_recipe()
+
         response = self.client.get(reverse('recipes:home'))
         response_recipes = response.context['recipes']
         content = response.content.decode('utf-8')

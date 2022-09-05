@@ -46,6 +46,16 @@ class RecipeViewsTest(RecipeSetup):
         self.assertIn('Recipe Title', content)
         self.assertEqual(len(response_recipes), 1)
 
+    # Teste que verifica o que retorna quando a recipe não esta publicada
+    def test_check_recipe_not_published_in_home(self):
+        self.make_recipe(is_published=False)
+
+        response = self.client.get(reverse('recipes:home'))
+        self.assertIn(
+            'Nada por aqui ainda',
+            response.content.decode('utf-8')
+        )
+
     # CATEGORY
     # Teste Para verificar se esta caregando a view esperada
     def test_recipe_category_view_ok(self):

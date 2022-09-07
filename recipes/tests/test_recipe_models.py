@@ -1,13 +1,33 @@
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
 
-from .test_recipe_base import RecipeSetup
+from .test_recipe_base import Recipe, RecipeSetup
 
 
 class RecipeModelTest(RecipeSetup):
     def setUp(self) -> None:
         self.recipe = self.make_recipe()
         return super().setUp()
+
+    def make_recipe_default(self):
+        recipe = Recipe(
+            author=self.make_author(username='NewUser'),
+            category=self.make_category(
+                name='Category preparation_steps'),
+            title='Title for preparation_steps',
+            description='Description',
+            slug='slug-recipe',
+            preparation_time=20,
+            preparation_time_unit='Minutos',
+            servings=4,
+            servings_unit='Pessoas',
+            preparation_steps='Preparo',
+        )
+
+        recipe.full_clean()
+        recipe.save()
+
+        return recipe
 
     # Teste será válido se quando no campo title o valor dele
     #  passar do max_length e subir uma exceção de ValidationError
@@ -36,3 +56,19 @@ class RecipeModelTest(RecipeSetup):
         setattr(self.recipe, field, "A" * (max_length + 1))
         with self.assertRaises(ValidationError):
             self.recipe.full_clean()
+
+    def test_recipe_preparation_steps_is_html_is_false_by_default(self):
+        recipe = self.make_recipe_default()
+
+        self.assertFalse(
+            recipe.preparation_steps_is_html,
+            msg='preparation_steps_is_html is not False by default'
+        )
+
+    def test_recipe_is_published_is_false_by_default(self):
+        recipe = self.make_recipe_default()
+
+        self.assertFalse(
+            recipe.is_published,
+            msg='is_published is not False by default'
+        )

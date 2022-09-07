@@ -72,3 +72,10 @@ class RecipeModelTest(RecipeSetup):
             recipe.is_published,
             msg='is_published is not False by default'
         )
+
+    def test_recipe_string_representation(self):
+        self.recipe.title = 'Title Representation'
+        self.recipe.full_clean()
+        self.recipe.save()
+
+        self.assertEqual(str(self.recipe), 'Title Representation')

@@ -16,7 +16,7 @@ class RecipeModelTest(RecipeSetup):
                 name='Category preparation_steps'),
             title='Title for preparation_steps',
             description='Description',
-            slug='slug-recipe',
+            slug='slug-recipe-default',
             preparation_time=20,
             preparation_time_unit='Minutos',
             servings=4,

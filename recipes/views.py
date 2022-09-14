@@ -50,7 +50,16 @@ def category(request, category_id):
 
 
 def search(request):
-    if not request.GET.get('search'):
+    term_search = request.GET.get('search', '').strip()
+
+    if not term_search:
         raise Http404()
 
-    return render(request, "recipes/pages/search.html")
+    return render(
+        request,
+        "recipes/pages/search.html",
+        context={
+            'page_title': f'Search for "{term_search}" |',
+            'term_search': term_search
+        }
+    )

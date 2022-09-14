@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import (HttpResponse, get_list_or_404, get_object_or_404,
                               render)
@@ -55,10 +56,16 @@ def search(request):
     if not term_search:
         raise Http404()
 
+    recipes = Recipe.objects.filter(
+        Q(title__icontains=term_search) | Q(
+            description__icontains=term_search),
+    )
+
     return render(
         request,
         "recipes/pages/search.html",
         context={
+            'recipes': recipes,
             'page_title': f'Search for "{term_search}" |',
             'term_search': term_search
         }

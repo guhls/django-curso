@@ -134,3 +134,9 @@ class RecipeViewsTest(RecipeSetup):
     def test_check_return_404_if_not_query_in_search(self):
         response = self.client.get(reverse('recipes:search'))
         self.assertEqual(response.status_code, 404)
+
+    def test_check_page_title_is_escaped(self):
+        url = reverse('recipes:search') + '?search=<Teste>'
+        response = self.client.get(url)
+        self.assertIn('Search for &quot;&lt;Teste&gt;&quot;',
+                      response.content.decode('utf-8'))

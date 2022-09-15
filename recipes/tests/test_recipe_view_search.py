@@ -25,3 +25,34 @@ class RecipeViewSeachTest(RecipeSetup):
         response = self.client.get(url)
         self.assertIn('Search for &quot;&lt;Teste&gt;&quot;',
                       response.content.decode('utf-8'))
+
+    def test_check_if_search_term_correspond(self):
+        title1 = 'Recipe title one'
+        title2 = 'Recipe title two'
+
+        recipe1 = self.make_recipe(
+            title=title1,
+            slug='recipe-title-one',
+            author_data={'username': 'one'}
+        )
+        recipe2 = self.make_recipe(
+            title=title2,
+            slug='recipe-title-two',
+            author_data={'username': 'two'}
+        )
+
+        response1 = self.client.get(
+            reverse('recipes:search')+f'?search={title1}')
+        response2 = self.client.get(
+            reverse('recipes:search')+f'?search={title2}')
+        response_both = self.client.get(
+            reverse('recipes:search')+'?search=title')
+
+        self.assertIn(recipe1, response1.context['recipes'])
+        self.assertNotIn(recipe2, response1.context['recipes'])
+
+        self.assertIn(recipe2, response2.context['recipes'])
+        self.assertNotIn(recipe1, response2.context['recipes'])
+
+        self.assertIn(recipe1, response_both.context['recipes'])
+        self.assertIn(recipe2, response_both.context['recipes'])

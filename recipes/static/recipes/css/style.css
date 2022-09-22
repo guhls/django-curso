@@ -264,6 +264,28 @@ body {
     padding: 0 4rem;
 }
 
+/*Pagination*/
+.pagination-content {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem 0.5rem;
+}
+
+.pagination .page-item {
+    padding: .5rem 1rem;
+    background: var(--color-gray-3);
+    text-decoration: none;
+}
+
+.pagination .page-link {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.pagination .current-page {
+    background-color: var(--color-primary-dark);
+}
+
 /*footer*/
 .main-footer {
     display: flex;

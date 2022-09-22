@@ -36,10 +36,10 @@ class RecipeViewHomeTest(RecipeSetup):
         self.make_recipe()
 
         response = self.client.get(reverse("recipes:home"))
-        response_recipes = response.context["recipes"]
+        response_recipes = response.context["recipes"].object_list
         content = response.content.decode("utf-8")
 
-        self.assertEqual(response_recipes.first().title, "Recipe Title")
+        self.assertEqual(response_recipes[0].title, "Recipe Title")
         self.assertIn("Recipe Title", content)
         self.assertEqual(len(response_recipes), 1)
 

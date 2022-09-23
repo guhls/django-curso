@@ -49,3 +49,17 @@ class RecipeViewHomeTest(RecipeSetup):
 
         response = self.client.get(reverse("recipes:home"))
         self.assertIn("Nada por aqui ainda", response.content.decode("utf-8"))
+
+    # Teste para validar se o pagination retorna as recipes esperadas
+    def test_check_paginator_is_correct(self):
+        r = self.make_recipe()
+        for i in range(12):
+            r.id = None
+            r.slug = f'title-{i}'
+            r.save()
+
+        response1 = self.client.get(reverse('recipes:home'))
+        response2 = self.client.get(reverse('recipes:home')+'?page=3')
+
+        self.assertEqual(len(response1.context['recipes'].object_list), 6)
+        self.assertEqual(len(response2.context['recipes'].object_list), 1)

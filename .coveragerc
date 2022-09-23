@@ -1,4 +1,4 @@
 [run]
 
 branch = true
-omit = env/*, **/*test*.py, manage.py, recipes/migrations/*
+omit = env/*, **/*test*.py, manage.py, recipes/migrations/*, __localcode/*

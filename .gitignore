@@ -171,5 +171,4 @@ GitHub.sublime-settings
 *.iws /out/
 
 # Personal #
-static/
 __localcode

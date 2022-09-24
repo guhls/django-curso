@@ -60,7 +60,7 @@ body {
 }
 
 .container {
-    width: 144rem;
+    max-width: 144rem;
     padding: var(--spacing-gutter-medium);
     margin: 0 auto;
 }
@@ -370,4 +370,10 @@ body {
 
 .m-y {
     margin: var(--spacing-gutter-medium) 0;
+}
+
+@media (max-width: 600px) {
+    .main-content-list {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
 }

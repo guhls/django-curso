@@ -1,9 +1,9 @@
+from unittest import mock
+
 from django.urls import resolve, reverse
 from recipes import views
 
 from .test_recipe_base import RecipeSetup
-
-#  from unittest import skip
 
 
 class RecipeViewHomeTest(RecipeSetup):
@@ -51,15 +51,19 @@ class RecipeViewHomeTest(RecipeSetup):
         self.assertIn("Nada por aqui ainda", response.content.decode("utf-8"))
 
     # Teste para validar se o pagination retorna as recipes esperadas
+    @mock.patch('recipes.views.PER_PAGE', new=3)
     def test_check_paginator_is_correct(self):
-        r = self.make_recipe()
-        for i in range(12):
-            r.id = None
-            r.slug = f'title-{i}'
-            r.save()
 
-        response1 = self.client.get(reverse('recipes:home'))
-        response2 = self.client.get(reverse('recipes:home')+'?page=3')
+        for i in range(8):
+            kwargs = {'author_data': {'username': f'u{i}'}, 'slug': f's{i}'}
+            self.make_recipe(**kwargs)
 
-        self.assertEqual(len(response1.context['recipes'].object_list), 6)
-        self.assertEqual(len(response2.context['recipes'].object_list), 1)
+        response = self.client.get(reverse('recipes:home'))
+        recipes = response.context['recipes']
+        paginator = recipes.paginator
+
+        self.assertEqual(paginator.num_pages, 3)
+
+        self.assertEqual(len(paginator.get_page(1)), 3)
+        self.assertEqual(len(paginator.get_page(2)), 3)
+        self.assertEqual(len(paginator.get_page(3)), 2)

@@ -1,6 +1,5 @@
 import os
 
-from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import (HttpResponse, get_list_or_404, get_object_or_404,
@@ -32,9 +31,6 @@ def home(request):
 
 def recipe(request, id):
     recipe = get_object_or_404(Recipe, pk=id, is_published=True)
-
-    messages.success(request, f'Ultima receita vizualizada{recipe.id}')
-    messages.info(request, 'Isso é uma info')
 
     return render(
         request,

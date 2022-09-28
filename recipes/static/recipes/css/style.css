@@ -182,6 +182,10 @@ body {
     color: var(--color-white);
 }
 
+.form-button {
+    margin-top: 2rem;
+}
+
 /*Search*/
 .search-form {
     max-width: 64rem;

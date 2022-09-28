@@ -77,3 +77,20 @@ class RegisterForm(forms.ModelForm):
                 code='invalid',
                 params={'value': '"teste"'}
             )
+
+    def clean(self):
+        data = super().clean()
+
+        password = data.get('password')
+        password2 = data.get('password2')
+
+        passwords_errors = ValidationError(
+            'Passwords not equals', code='invalid')
+
+        if password != password2:
+            raise ValidationError(
+                {
+                    'password': passwords_errors,
+                    'password2': [passwords_errors],
+                }
+            )

@@ -31,6 +31,18 @@
                     <button class="form-button" type="submit">Enviar</button>
                 </div>
             </div>
+
         </form>
+
+        <div class="form-content form-content-grid">
+            <div class="form-group">
+                {% if form.errors %}
+                    <div class="message message-error">
+                        Have errors
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 {% endblock content %}

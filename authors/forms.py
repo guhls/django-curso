@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr, attr_value):
@@ -66,3 +67,13 @@ class RegisterForm(forms.ModelForm):
                 }
             )
         }
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        if 'teste' in data:
+            raise ValidationError(
+                'Palavra %(value)s não é permitida',
+                code='invalid',
+                params={'value': '"teste"'}
+            )

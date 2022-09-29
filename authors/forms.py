@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -11,11 +13,29 @@ def add_placeholder(field, placeholder_value):
     add_attr(field, 'placeholder', placeholder_value)
 
 
+# A função retornara None para o campo password caso não haja match do regex
+def strong_password(password):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+
+    if not regex.match(password):
+        raise ValidationError('Password is weak', code='invalid')
+
+
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         add_placeholder(self.fields['last_name'], 'Your last name goes here')
+
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Type your password',
+            }
+        ),
+        validators=[strong_password]
+    )
 
     password2 = forms.CharField(
         required=True,
@@ -78,19 +98,24 @@ class RegisterForm(forms.ModelForm):
                 params={'value': '"teste"'}
             )
 
+        return data
+
+    # Ele primeiro checa usnado os validators
+    # O clean_password e clean é realizado depois
     def clean(self):
-        data = super().clean()
+        if not self.errors:
+            data = super().clean()
 
-        password = data.get('password')
-        password2 = data.get('password2')
+            password = data.get('password')
+            password2 = data.get('password2')
 
-        passwords_errors = ValidationError(
-            'Passwords not equals', code='invalid')
+            passwords_errors = ValidationError(
+                'Passwords not equals', code='invalid')
 
-        if password != password2:
-            raise ValidationError(
-                {
-                    'password': passwords_errors,
-                    'password2': [passwords_errors],
-                }
-            )
+            if password != password2:
+                raise ValidationError(
+                    {
+                        'password': passwords_errors,
+                        'password2': [passwords_errors],
+                    }
+                )

@@ -25,8 +25,11 @@ class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        add_placeholder(self.fields['last_name'], 'Your last name goes here')
+        # First_name e Last_name usando o init
+        add_placeholder(self.fields['first_name'], 'Type your name')
+        add_placeholder(self.fields['last_name'], 'Type your last name')
 
+    # Password e password2 sobreescrevendo os campos no Meta usando variaveis
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(
@@ -34,7 +37,11 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password',
             }
         ),
-        validators=[strong_password]
+        validators=[strong_password],
+        label='Password',
+        help_text='Password must have at least one uppercase letter, '
+        'one lowercase letter and one number. The length should be '
+        'at least 8 characters.'
     )
 
     password2 = forms.CharField(
@@ -43,7 +50,8 @@ class RegisterForm(forms.ModelForm):
             attrs={
                 'placeholder': 'Repeat the password',
             }
-        )
+        ),
+        label='Password2'
     )
 
     class Meta:
@@ -61,7 +69,6 @@ class RegisterForm(forms.ModelForm):
             'first_name': 'First name',
             'last_name': 'Last name',
             'email': 'E-mail',
-            'password': 'Password'
         }
 
         help_texts = {
@@ -74,31 +81,20 @@ class RegisterForm(forms.ModelForm):
             },
         }
 
+        # Adcionando placeholders em username e email em widgets no Meta
         widgets = {
-            'first_name': forms.TextInput(
+            'username': forms.TextInput(
                 attrs={
-                    'placeholder': 'Type your user here',
+                    'placeholder': 'Type your username',
                 }
             ),
-            'password': forms.PasswordInput(
+            'email': forms.PasswordInput(
                 attrs={
-                    'placeholder': 'Type your password',
-                    'class': 'input-password',
+                    'placeholder': 'Type your E-mail',
+                    'class': 'input-email',
                 }
             )
         }
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'teste' in data:
-            raise ValidationError(
-                'Palavra %(value)s não é permitida',
-                code='invalid',
-                params={'value': '"teste"'}
-            )
-
-        return data
 
     # Ele primeiro checa usnado os validators
     # O clean_password e clean é realizado depois

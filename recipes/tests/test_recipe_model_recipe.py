@@ -41,7 +41,7 @@ class RecipeModelTest(RecipeSetup):
         #     #  ele sobe a exception ValidationError
         #     self.recipe.full_clean()
 
-    # Os testes serão criados aqui o def test_recipe_max_length náo é um test
+    # Os testes serão criados aqui, o def test_recipe_max_length náo é um test
     #   ele é um agrupador de testes que serão criados com a parametrização
     # @parameterized.expand é usado pois a classe é herdada do TestCase
     @parameterized.expand(

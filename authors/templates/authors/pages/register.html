@@ -36,15 +36,15 @@
 
         </form>
 
+        {% if form.errors %}
         <div class="form-content form-content-grid">
             <div class="form-group">
-                {% if form.errors %}
-                    <div class="message message-error">
-                        Have errors
-                    </div>
-                {% endif %}
+                <div class="message message-error">
+                    Have errors
+                </div>
             </div>
         </div>
+        {% endif %}
 
     </div>
 {% endblock content %}

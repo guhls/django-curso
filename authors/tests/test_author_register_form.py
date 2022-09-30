@@ -51,7 +51,8 @@ class AuthorRegisterFormUnitTest(TestCase):
         self.assertEqual(help_text, actual_help_text)
 
     @parameterized.expand([
-        ('username', 'This field is required'),
+        ('username', 'This field username is required'),
+        ('email', 'The E-mail must not be empty')
     ])
     def test_fields_required_error_text(self, field, error_text):
         form = RegisterForm()
@@ -72,10 +73,16 @@ class AuthorRegisterFormIntegration(DjangoTestCase):
         return super().setUp()
 
     @parameterized.expand([
-        ('username', 'This field is required')
+        ('username', 'This field username is required'),
+        ('first_name', 'First name is required'),
+        ('last_name', 'Last name is required'),
+        ('email', 'The E-mail must not be empty'),
+        ('password', 'Your must provide a password'),
+        ('password2', 'Please, repeat your password')
     ])
     def test_check_if_fields_empty(self, field, msg):
         self.form_data[field] = ''
         url = reverse('authors:create')
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get(field))

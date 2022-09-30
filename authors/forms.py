@@ -13,6 +13,19 @@ def add_placeholder(field, placeholder_value):
     add_attr(field, 'placeholder', placeholder_value)
 
 
+def add_error_messages(field, type_error, msg_error):
+    field.error_messages[type_error] = msg_error
+
+
+def add_label(field, label_value):
+    field.label = label_value
+
+
+def set_field_required(fields):
+    for field in fields:
+        field.required = True
+
+
 # A função retornara None para o campo password caso não haja match do regex
 def strong_password(password):
     regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
@@ -29,6 +42,21 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['first_name'], 'Type your name')
         add_placeholder(self.fields['last_name'], 'Type your last name')
 
+        add_error_messages(
+            self.fields['first_name'], 'required', 'First name is required'
+        )
+        add_error_messages(
+            self.fields['last_name'], 'required', 'Last name is required'
+        )
+
+        add_label(self.fields['first_name'], 'First name')
+        add_label(self.fields['last_name'], 'Last name')
+
+        set_field_required([
+            self.fields['first_name'],
+            self.fields['last_name']
+        ])
+
     # Password e password2 sobreescrevendo os campos no Meta usando variaveis
     password = forms.CharField(
         required=True,
@@ -39,6 +67,9 @@ class RegisterForm(forms.ModelForm):
         ),
         validators=[strong_password],
         label='Password',
+        error_messages={
+            'required': 'Your must provide a password'
+        },
         help_text='Password must have at least one uppercase letter, '
         'one lowercase letter and one number. The length should be '
         'at least 8 characters.'
@@ -51,7 +82,24 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Repeat the password',
             }
         ),
-        label='Password2'
+        label='Password2',
+        error_messages={
+            'required': 'Please, repeat your password'
+        },
+    )
+
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Type your E-mail',
+            }
+        ),
+        label='E-mail',
+        help_text='The email must have @',
+        error_messages={
+            'required': 'The E-mail must not be empty'
+        }
     )
 
     class Meta:
@@ -66,18 +114,16 @@ class RegisterForm(forms.ModelForm):
 
         labels = {
             'username': 'Username',
-            'first_name': 'First name',
-            'last_name': 'Last name',
-            'email': 'E-mail',
         }
 
         help_texts = {
-            'email': 'The email must have @'
+            'username': ('Obrigatório. 150 caracteres ou menos. Letras, '
+                         'números e @/./+/-/_ apenas.')
         }
 
         error_messages = {
             'username': {
-                'required': 'This field is required'
+                'required': 'This field username is required'
             },
         }
 
@@ -88,12 +134,6 @@ class RegisterForm(forms.ModelForm):
                     'placeholder': 'Type your username',
                 }
             ),
-            'email': forms.PasswordInput(
-                attrs={
-                    'placeholder': 'Type your E-mail',
-                    'class': 'input-email',
-                }
-            )
         }
 
     # Ele primeiro checa usnado os validators

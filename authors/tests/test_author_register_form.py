@@ -86,3 +86,27 @@ class AuthorRegisterFormIntegration(DjangoTestCase):
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get(field))
+
+    def test_field_username_has_least_4_characters(self):
+        self.form_data['username'] = 'job'
+
+        url = reverse('authors:create')
+        response = self.client.post(url, self.form_data, follow=True)
+
+        msg = 'Username must have least 4 characters'
+
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertEqual(
+            msg, response.context['form'].errors.get('username')[0])
+
+    def test_field_username_has_less_150_characters(self):
+        self.form_data['username'] = 'A' * 151
+
+        url = reverse('authors:create')
+        response = self.client.post(url, self.form_data, follow=True)
+
+        msg = 'Username must have less than 150 characters'
+
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertEqual(
+            msg, response.context['form'].errors.get('username')[0])

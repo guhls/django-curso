@@ -88,6 +88,23 @@ class RegisterForm(forms.ModelForm):
         },
     )
 
+    username = forms.CharField(
+        min_length=4, max_length=150,
+        label='Username',
+        help_text=('Obrigatório. 150 caracteres ou menos. Letras, '
+                   'números e @/./+/-/_ apenas.'),
+        error_messages={
+            'required': 'This field username is required',
+            'min_length': 'Username must have least 4 characters',
+            'max_length': 'Username must have less than 150 characters',
+        },
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Type your username'
+            }
+        )
+    )
+
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(
@@ -111,30 +128,6 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password'
         ]
-
-        labels = {
-            'username': 'Username',
-        }
-
-        help_texts = {
-            'username': ('Obrigatório. 150 caracteres ou menos. Letras, '
-                         'números e @/./+/-/_ apenas.')
-        }
-
-        error_messages = {
-            'username': {
-                'required': 'This field username is required'
-            },
-        }
-
-        # Adcionando placeholders em username e email em widgets no Meta
-        widgets = {
-            'username': forms.TextInput(
-                attrs={
-                    'placeholder': 'Type your username',
-                }
-            ),
-        }
 
     # Ele primeiro checa usnado os validators
     # O clean_password e clean é realizado depois

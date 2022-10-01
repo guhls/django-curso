@@ -130,6 +130,19 @@ class RegisterForm(forms.ModelForm):
             'password'
         ]
 
+    # Para tornar o email unique é necessario criar a logica no clean
+    #   pois não é possivel modificar o model User
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            raise ValidationError(
+                'Email alright exists, please try another', code='invalid')
+        else:
+            return email
+
     # Ele primeiro checa usnado os validators
     # O clean_password e clean é realizado depois
     def clean(self):

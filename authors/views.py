@@ -26,7 +26,10 @@ def create(request):
     form = RegisterForm(POST)
 
     if form.is_valid():
-        form.save()
+        user = form.save(commit=False)
+        user.set_password(user.password)
+        user.save()
+
         messages.success(request, 'User Created')
 
         del (request.session['form_data'])

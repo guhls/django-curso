@@ -67,3 +67,14 @@ class RecipeViewHomeTest(RecipeSetup):
         self.assertEqual(len(paginator.get_page(1)), 3)
         self.assertEqual(len(paginator.get_page(2)), 3)
         self.assertEqual(len(paginator.get_page(3)), 2)
+
+    def test_pagination_default_one_if_out_of_range_paginator(self):
+        url = reverse('recipes:home') + '?page=A'
+        response = self.client.get(url)
+
+        self.assertEqual(1, response.context['recipes'].number)
+
+        url = reverse('recipes:home') + '?page=2'
+        response = self.client.get(url)
+
+        self.assertEqual(1, response.context['recipes'].number)

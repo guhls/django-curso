@@ -46,7 +46,10 @@ def make_pagination_range(
 
 
 def make_pagination(request, query_set, qty_items, qty_pages):
-    current_page = request.GET.get('page', 1)
+    try:
+        current_page = int(request.GET.get('page', 1))
+    except ValueError:
+        current_page = 1
 
     paginator = Paginator(query_set, qty_items)
     recipes_obj = paginator.get_page(current_page)

@@ -31,7 +31,8 @@ def strong_password(password):
     regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
 
     if not regex.match(password):
-        raise ValidationError('Password is weak', code='invalid')
+        raise ValidationError(
+            'Password is weak, check the help text', code='invalid')
 
 
 class RegisterForm(forms.ModelForm):

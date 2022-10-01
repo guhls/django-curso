@@ -110,3 +110,41 @@ class AuthorRegisterFormIntegration(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertEqual(
             msg, response.context['form'].errors.get('username')[0])
+
+    # Checa se quando a senha for fraca retorne o texto de erro
+    def test_password_field_is_strong(self):
+        self.form_data['password'] = 'abc'
+
+        url = reverse('authors:create')
+        response = self.client.post(url, self.form_data, follow=True)
+
+        msg = 'Password is weak, check the help text'
+
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('password'))
+
+    # Confere se as senhas forem diferentes retorne o texto de erro
+    def test_passwords_filds_is_same(self):
+        self.form_data['password'] = 'Abc12345'
+        self.form_data['password2'] = 'Abc'
+
+        url = reverse('authors:create')
+        response = self.client.post(url, self.form_data, follow=True)
+
+        msg = 'Passwords not equals'
+
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('password'))
+
+        self.form_data['password'] = 'Abc12345'
+        self.form_data['password2'] = 'Abc12345'
+
+        response = self.client.post(url, self.form_data, follow=True)
+
+        self.assertNotIn(msg, response.content.decode('utf-8'))
+
+    def test_view_create_returns_404_for_get(self):
+        url = reverse('authors:create')
+        response = self.client.get(url)
+
+        self.assertEqual(404, response.status_code)

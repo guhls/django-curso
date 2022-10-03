@@ -15,11 +15,11 @@ def register(request):
 
     return render(request, 'authors/pages/register.html', context={
         'form': form,
-        'form_action': reverse('authors:create')
+        'form_action': reverse('authors:register_create')
     })
 
 
-def create(request):
+def register_create(request):
     if not request.POST:
         raise Http404
 
@@ -37,3 +37,11 @@ def create(request):
         del (request.session['form_data'])
 
     return redirect('authors:register')
+
+
+def login(request):
+    return render(request, 'authors/pages/login.html')
+
+
+def login_create(request):
+    ...

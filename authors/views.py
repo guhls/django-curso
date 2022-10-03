@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -39,7 +40,7 @@ def register_create(request):
     return redirect('authors:register')
 
 
-def login(request):
+def login_view(request):
     form = LoginForm()
     return render(request, 'authors/pages/login.html', context={
         'form': form,
@@ -48,4 +49,23 @@ def login(request):
 
 
 def login_create(request):
-    ...
+    if not request.POST:
+        raise Http404()
+
+    form = LoginForm(request.POST)
+
+    if form.is_valid():
+        authenticate_user = authenticate(
+            username=form.cleaned_data.get('username'),
+            password=form.cleaned_data.get('password'),
+        )
+
+        if authenticate_user:
+            login(request, authenticate_user)
+            messages.success(request, 'You are Log in')
+        else:
+            messages.error(request, 'Invalid Login')
+    else:
+        messages.error(request, 'Username or Password invalid')
+
+    return redirect(reverse('authors:login'))

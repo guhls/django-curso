@@ -6,10 +6,17 @@
     <div class="main-content container center">
         <h1>Login {{request.session.number}}</h1>
         {% if request.user.is_authenticated %}
-            <p>
+            <div>
                 You are logged with
                 {{ request.user.username }} | {{ request.user.id }}
-            </p>
+
+                If you want do loggout
+                <form class="inline-form" action="{% url 'authors:logout' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{request.user.username}}">
+                    <button class="plaintext-button" type="submit">Click Here</button>
+                </form>
+            </div>
         {% endif %}
     </div>
 

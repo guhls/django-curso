@@ -58,5 +58,4 @@
       "javascript": "javascriptreact",
       "typescript": "typescriptreact"
     },
-    "python.analysis.typeCheckingMode": "basic",
   }

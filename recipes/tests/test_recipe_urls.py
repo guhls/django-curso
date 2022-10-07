@@ -5,7 +5,7 @@ from django.urls import reverse
 class RecipeURLsTest(TestCase):
     def test_recipe_home_url_is_ok(self):
         home_url = reverse('recipes:home')
-        self.assertEqual(home_url, '/recipes/')
+        self.assertEqual(home_url, '/')
 
     def test_category_url_ok(self):
         category_url = reverse('recipes:category', args=(1, ))

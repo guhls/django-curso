@@ -10,3 +10,10 @@ class TestRecipeHomePageFunctionalTestCase(TestBaseFunctionalTestCase):
         self.browser.get(self.live_server_url)
         body = self.browser.find_element(By.TAG_NAME, 'body')
         self.assertIn('Nada por aqui ainda', body.text)
+
+    def test_recipe_search_page_within_recipe(self):
+        self.browser.get(self.live_server_url +
+                         '/recipes/search/?search=Teste')
+        self.sleep()
+        body = self.browser.find_element(By.CLASS_NAME, 'search-h1')
+        self.assertIn("Nada por aqui ainda", body.text)
